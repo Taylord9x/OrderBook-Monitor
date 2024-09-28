@@ -1,0 +1,14 @@
+# Ignore user-specific files
+*.user
+*.suo
+
+# Ignore build output files
+*.dll
+*.exe
+
+# Ignore VS Code settings
+.vscode/
+
+# Ignore all bin and obj directories in the Solution's Projects
+**/bin/
+**/obj/
