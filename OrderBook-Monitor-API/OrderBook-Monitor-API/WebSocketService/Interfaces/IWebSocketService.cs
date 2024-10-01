@@ -2,13 +2,9 @@ namespace OrderBook_Monitor_API.WebSocketService.Interfaces;
 
 public interface IWebSocketService
 {
-    void Connect(string uri);
+    Task Connect();
 
-    void Authenticate(string apiKey, string secret);
+    Task Subscribe();
 
-    void Subscribe(string channel);
-
-    void Unsubscribe(string channel);
-
-    void OnError(Action<Exception> onError);
+    Task Unsubscribe();
 }
