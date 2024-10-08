@@ -14,30 +14,16 @@ using OrderBook_Monitor_API.WebSocketService.Interfaces;
 var builder = WebApplication.CreateBuilder(args);
 
 var ask = new SortedDictionary<decimal, List<Order>>();
-
 builder.Services.AddSingleton(ask);
-builder.Services.AddSingleton<IWebSocketService, WebSocketService>();
-builder.Services.AddSingleton<IOrderBookManager, OrderBookManager>();
-builder.Services.AddSingleton<ICryptoIndexManager, CryptoIndexManager>();
-builder.Services.AddScoped<IPricingCalculator, PricingCalculator>();
-builder.Services.AddScoped<IPriceSupplier, PriceSupplier>();
-builder.Services.AddSingleton<WebSocketStartupService>();
+
+ConfigureServices(builder.Services);
 
 var app = builder.Build();
 
 var webSocketStartupService = app.Services.GetRequiredService<WebSocketStartupService>();
 await webSocketStartupService.StartAsync();
 
-app.MapGet("/api/price/get-price", (decimal quantity, IPriceSupplier priceSupplier) =>
-{
-    return priceSupplier.GetPriceResult(quantity);
-});
-
-app.MapPost("/api/crypto-index/calculate-allocations", async (ICryptoIndexManager cryptoIndexManager, CryptoIndexManagerRequest request) =>
-{
-    var allocations = await cryptoIndexManager.CalculateAllocations(request.TotalCapital, request.AssetCap, request.Assets);
-    return Results.Ok(allocations);
-});
+ConfigureEndpoints(app, webSocketStartupService);
 
 app.Lifetime.ApplicationStopping.Register(async () =>
 {
@@ -45,3 +31,33 @@ app.Lifetime.ApplicationStopping.Register(async () =>
 });
 
 app.Run();
+
+static void ConfigureServices(IServiceCollection services)
+{
+    services.AddSingleton<IWebSocketService, WebSocketService>();
+    services.AddSingleton<IOrderBookManager, OrderBookManager>();
+    services.AddScoped<ICryptoIndexManager, CryptoIndexManager>();
+    services.AddScoped<ISymbolsExtractor, SymbolsExtractor>();
+    services.AddScoped<IPercentageSupplier, PercentageSupplier>();
+    services.AddScoped<IZarValueSupplier, ZarValueSupplier>();
+    services.AddScoped<IPercentageNormalizer, PercentageNormalizer>();
+    services.AddScoped<IAmountSupplier, AmountSupplier>();
+    services.AddScoped<IExternalPriceService, ExternalPriceService>();
+    services.AddScoped<IPricingCalculator, PricingCalculator>();
+    services.AddScoped<IPriceSupplier, PriceSupplier>();
+    services.AddSingleton<WebSocketStartupService>();
+}
+
+static void ConfigureEndpoints(WebApplication app, WebSocketStartupService webSocketStartupService)
+{
+    app.MapGet("/api/price/get-price", (decimal quantity, IPriceSupplier priceSupplier) =>
+    {
+        return priceSupplier.GetPriceResult(quantity);
+    });
+
+    app.MapPost("/api/crypto-index/calculate-allocations", async (ICryptoIndexManager cryptoIndexManager, CryptoIndexManagerRequest request) =>
+    {
+        var allocations = await cryptoIndexManager.CalculateAllocations(request.TotalCapital, request.AssetCap, request.Assets);
+        return Results.Ok(allocations);
+    });
+}
