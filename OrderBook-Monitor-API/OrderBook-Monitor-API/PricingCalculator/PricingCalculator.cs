@@ -1,46 +1,34 @@
-using OrderBook_Monitor_API.Models;
+using OrderBook_Monitor_API.OrderBookManager.Interfaces;
 using OrderBook_Monitor_API.PricingCalculator.Interfaces;
 
 namespace OrderBook_Monitor_API.PricingCalculator;
-public class PricingCalculator(SortedDictionary<decimal, List<Order>> asks) : IPricingCalculator
+public class PricingCalculator(IOrderBookManager orderBookManager) : IPricingCalculator
 {
-  private readonly SortedDictionary<decimal, List<Order>> _asks = asks;
+  private readonly IOrderBookManager _orderBookManager = orderBookManager;
   
   public decimal CalculatePrice(decimal quantity)
   {
-    decimal totalCost = 0m;
+    var asks = _orderBookManager.GetTop25Asks();
+    decimal totalCost = 0;
     decimal remainingQuantity = quantity;
 
-    foreach (var entry in _asks)
+    foreach (var ask in asks)
     {
-      decimal price = entry.Key;
-      List<Order> orders = entry.Value;
-
-      foreach (var order in orders)
+      if (decimal.TryParse(ask.Price, out decimal price) && 
+          decimal.TryParse(ask.Orders[0].Quantity, out decimal availableQuantity))
       {
-        if (remainingQuantity <= 0)
-          break;
-
-        if (order.Quantity > remainingQuantity)
+        if (remainingQuantity <= availableQuantity)
         {
           totalCost += remainingQuantity * price;
-          order.Quantity -= remainingQuantity;
-          remainingQuantity = 0;
+          break;
         }
         else
         {
-          totalCost += order.Quantity * price;
-          remainingQuantity -= order.Quantity;
-          order.Quantity = 0;
+          totalCost += availableQuantity * price;
+          remainingQuantity -= availableQuantity;
         }
       }
     }
-
-    if (remainingQuantity > 0)
-    {
-      throw new InvalidOperationException("Not enough liquidity in the order book to fulfill the request.");
-    }
-
-    return totalCost;
+    return totalCost / quantity;
   }
 }

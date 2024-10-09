@@ -1,6 +1,7 @@
+using OrderBook_Monitor_API.CheckSumCalculator;
+using OrderBook_Monitor_API.CheckSumCalculator.Interfaces;
 using OrderBook_Monitor_API.CryptoIndexFund;
 using OrderBook_Monitor_API.CryptoIndexFund.Interfaces;
-using OrderBook_Monitor_API.Models;
 using OrderBook_Monitor_API.Models.CryptoIndexFund;
 using OrderBook_Monitor_API.OrderBookManager;
 using OrderBook_Monitor_API.OrderBookManager.Interfaces;
@@ -12,9 +13,6 @@ using OrderBook_Monitor_API.WebSocketService;
 using OrderBook_Monitor_API.WebSocketService.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
-
-var ask = new SortedDictionary<decimal, List<Order>>();
-builder.Services.AddSingleton(ask);
 
 ConfigureServices(builder.Services);
 
@@ -35,6 +33,7 @@ app.Run();
 static void ConfigureServices(IServiceCollection services)
 {
     services.AddSingleton<IWebSocketService, WebSocketService>();
+    services.AddSingleton<ICheckSumCalculator, CheckSumCalculator>();
     services.AddSingleton<IOrderBookManager, OrderBookManager>();
     services.AddScoped<ICryptoIndexManager, CryptoIndexManager>();
     services.AddScoped<ISymbolsExtractor, SymbolsExtractor>();
