@@ -10,7 +10,7 @@ public static class SwaggerConfig
   public static void ConfigureSwaggerGen(SwaggerGenOptions options)
   {
     options.EnableAnnotations();
-    options.SwaggerDoc("v1", new OpenApiInfo { Title = "Your API", Version = "v1" });
+    options.SwaggerDoc("v1", new OpenApiInfo { Title = "Orderbook Monitor API", Version = "v1" });
             
     options.MapType<IEnumerable<Asset>>(() => new OpenApiSchema
     {

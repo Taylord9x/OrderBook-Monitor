@@ -9,3 +9,14 @@ services:
       - "5032:8080"
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
+
+  reactapp:
+    build:
+      context: ./orderbook-monitor-client
+      dockerfile: Dockerfile
+    ports:
+      - "3000:80"
+    depends_on:
+      - orderbookmonitorapi
+    environment:
+      - NODE_ENV=development

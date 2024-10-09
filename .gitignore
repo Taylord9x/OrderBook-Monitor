@@ -1,14 +1,38 @@
-# Ignore user-specific files
+# User-specific files
 *.user
 *.suo
 
-# Ignore build output files
+# VS Code settings
+.vscode/
+
+# Build output files
 *.dll
 *.exe
 
-# Ignore VS Code settings
-.vscode/
-
-# Ignore all bin and obj directories in the Solution's Projects
+# Solution's Projects build directories
 **/bin/
 **/obj/
+
+# React specific ignores
+# Dependencies
+orderbook-monitor-client/node_modules
+orderbook-monitor-client/.pnp
+orderbook-monitor-client/.pnp.js
+
+# Testing
+orderbook-monitor-client/coverage
+
+# Production
+orderbook-monitor-client/build
+
+# Misc
+.DS_Store
+orderbook-monitor-client/.env.local
+orderbook-monitor-client/.env.development.local
+orderbook-monitor-client/.env.test.local
+orderbook-monitor-client/.env.production.local
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
