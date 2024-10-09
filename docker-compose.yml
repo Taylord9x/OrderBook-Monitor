@@ -1,0 +1,9 @@
+version: '3.8'
+
+services:
+  orderbookmonitorapi:
+    build:
+      context: ./OrderBook-Monitor-API/OrderBook-Monitor-API
+      dockerfile: Dockerfile
+    ports:
+      - "5000:80"
