@@ -22,14 +22,14 @@ Getting Started
 
 Follow these steps to set up and run the application:
 
-  Navigate to the project directory: Open your terminal and go to the root directory where the docker-compose.yml file is located:
-    cd ~/Repos/OrderBook-Monitor/
+    Navigate to the project directory: Open your terminal and go to the root directory where the docker-compose.yml file is located:
+      cd ~/Repos/OrderBook-Monitor/
 
-  Build the Docker images: Execute the following command to build the Docker images for both the API and the frontend:
-    docker-compose build
+    Build the Docker images: Execute the following command to build the Docker images for both the API and the frontend:
+      docker-compose build
 
-  Start the application: Run the following command to start the application:
-    docker-compose up
+    Start the application: Run the following command to start the application:
+      docker-compose up
 
 Access the applications:
 
@@ -38,10 +38,10 @@ Access the applications:
 
 API Endpoints
 
-  Get Price:
+    Get Price:
     GET /api/price/get-price?quantity={quantity}
     Returns the ZAR price for the specified quantity of USDT.
 
-  Index Fund Calculation:
+    Index Fund Calculation:
     POST /api/index-fund
     Accepts asset_cap, total_capital, and a list containing coin symbol, market cap, and price. Returns the allocation details for the fund.
