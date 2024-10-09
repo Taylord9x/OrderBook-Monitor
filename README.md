@@ -1,7 +1,7 @@
 OrderBook Monitor
 Overview
 
-This project is a containerized system for monitoring the USDT/ZAR order book on VALR. It consists of a backend API built with FastAPI, which streams order book updates from the VALR websocket API, and a frontend React application that allows users to interactively query prices based on the USDT quantity.
+This project is a containerized system for monitoring the USDT/ZAR order book on VALR. It consists of a backend API built with ASP.NET, which streams order book updates from the VALR websocket API, and a frontend React application that allows users to interactively query prices based on the USDT quantity.
 Features
 
     Backend API:
