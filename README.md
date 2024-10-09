@@ -18,17 +18,6 @@ Prerequisites
     Docker
     Docker Compose
 
-Project Structure
-  OrderBook-Monitor/
-├── OrderBook-Monitor-API/
-│   ├── Dockerfile
-│   └── ...
-└── orderbook-monitor-client/
-    ├── Dockerfile
-    └── ...
-├── docker-compose.yml
-└── README.md
-
 Getting Started
 
 Follow these steps to set up and run the application:
