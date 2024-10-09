@@ -1,24 +1,28 @@
-using OrderBook_Monitor_API.CryptoIndexFund;
 using OrderBook_Monitor_API.CryptoIndexFund.Interfaces;
 using OrderBook_Monitor_API.Models;
 using OrderBook_Monitor_API.Models.CryptoIndexFund;
-using OrderBook_Monitor_API.OrderBookManager;
-using OrderBook_Monitor_API.OrderBookManager.Interfaces;
-using OrderBook_Monitor_API.PricingCalculator;
-using OrderBook_Monitor_API.PricingCalculator.Interfaces;
-using OrderBook_Monitor_API.PricingSupplier;
 using OrderBook_Monitor_API.PricingSupplier.Interfaces;
+using OrderBook_Monitor_API.ServiceConfiguration;
+using OrderBook_Monitor_API.Swagger;
 using OrderBook_Monitor_API.WebSocketService;
-using OrderBook_Monitor_API.WebSocketService.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen(SwaggerConfig.ConfigureSwaggerGen);
 
 var ask = new SortedDictionary<decimal, List<Order>>();
 builder.Services.AddSingleton(ask);
 
-ConfigureServices(builder.Services);
+ServiceConfig.ConfigureServices(builder.Services);
 
 var app = builder.Build();
+
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
 
 var webSocketStartupService = app.Services.GetRequiredService<WebSocketStartupService>();
 await webSocketStartupService.StartAsync();
@@ -31,22 +35,6 @@ app.Lifetime.ApplicationStopping.Register(async () =>
 });
 
 app.Run();
-
-static void ConfigureServices(IServiceCollection services)
-{
-    services.AddSingleton<IWebSocketService, WebSocketService>();
-    services.AddSingleton<IOrderBookManager, OrderBookManager>();
-    services.AddScoped<ICryptoIndexManager, CryptoIndexManager>();
-    services.AddScoped<ISymbolsExtractor, SymbolsExtractor>();
-    services.AddScoped<IPercentageSupplier, PercentageSupplier>();
-    services.AddScoped<IZarValueSupplier, ZarValueSupplier>();
-    services.AddScoped<IPercentageNormalizer, PercentageNormalizer>();
-    services.AddScoped<IAmountSupplier, AmountSupplier>();
-    services.AddScoped<IExternalPriceService, ExternalPriceService>();
-    services.AddScoped<IPricingCalculator, PricingCalculator>();
-    services.AddScoped<IPriceSupplier, PriceSupplier>();
-    services.AddSingleton<WebSocketStartupService>();
-}
 
 static void ConfigureEndpoints(WebApplication app, WebSocketStartupService webSocketStartupService)
 {

@@ -7,7 +7,7 @@ namespace OrderBook_Monitor_API.CryptoIndexFund;
 public class ExternalPriceService : IExternalPriceService
 {
   private const string ExternalPriceServiceUri = "https://api.binance.com/api/v3/";
-  private const string InternalPriceServiceUri = "http://localhost:5032/";
+  private const string InternalPriceServiceUri = "http://orderbookmonitorapi:8080/";
   private const string ExternalSkeletonUrl = "depth?symbol={0}USDT&limit=1";
   private const string InternalSkeletonUrl = "api/price/get-price?quantity={0}";
 
